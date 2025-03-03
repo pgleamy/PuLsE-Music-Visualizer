@@ -1,1 +1,1 @@
-# PuLsE-Music-Visualizer
+# PuLsE Music Visualizer
