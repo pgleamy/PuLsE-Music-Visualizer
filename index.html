@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PuLsE Music Visualizer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background Image with Opacity */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://via.placeholder.com/1920x1080'); /* Replace with your image */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(26, 26, 26, 0.9);
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3em;
+            margin: 0;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        nav {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background-color: #00ffff;
+            color: #121212;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn.download {
+            background-color: #39ff14;
+        }
+
+        .btn.donate {
+            background-color: #ff007f;
+        }
+
+        /* Video Section */
+        .video-section {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 50%;
+            max-width: 600px;
+            padding-bottom: 28.125%; /* 16:9 Aspect Ratio */
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Screenshots Section */
+        .screenshots-section {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .screenshot-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .screenshot-grid img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            cursor: pointer;
+            opacity: 0.95;
+            transition: opacity 0.3s ease;
+            border-radius: 10px; /* Added: Rounded corners for thumbnails */
+        }
+
+        .screenshot-grid img:hover {
+            opacity: 1;
+        }
+
+        /* Features Pane */
+        #features-pane {
+            position: fixed;
+            top: 0;
+            left: 0; /* Changed: Fixed position, no sliding */
+            width: 20%;
+            height: 100%;
+            background-color: rgba(26, 26, 26, 0.9);
+            padding: 20px;
+            opacity: 0; /* Added: Starts invisible */
+            visibility: hidden; /* Added: Hidden from interaction */
+            transition: opacity 0.3s ease-in-out; /* Changed: Fade effect */
+            z-index: 1000;
+        }
+
+        #features-pane.open {
+            opacity: 1; /* Added: Fully visible when open */
+            visibility: visible; /* Added: Accessible when open */
+        }
+
+        #close-features {
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        #features-pane h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2em;
+            margin: 0 0 20px;
+        }
+
+        #features-pane ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #features-pane li {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        /* Modal for Full-Sized Images */
+.modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            display: block;
+            max-width: 97vw; /* Max 90% of viewport width */
+            max-height: 97vh; /* Max 90% of viewport height */
+            object-fit: contain; /* Maintain aspect ratio */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #bbb;
+        }
+
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            user-select: none;
+        }
+
+        .prev {
+            left: 0;
+        }
+
+        .next {
+            right: 0;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(26, 26, 26, 0.9);
+        }
+
+        footer a {
+            color: #00ffff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .screenshot-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            #features-pane {
+                width: 40%;
+            }
+
+            nav {
+                position: static;
+                margin-top: 20px;
+            }
+
+            .btn {
+                display: inline-block;
+                margin: 5px;
+            }
+
+            .video-wrapper {
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .screenshot-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #features-pane {
+                width: 100%;
+            }
+
+            .video-wrapper {
+                width: 100%;
+            }
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3em; /* Base size for the title */
+        }
+
+        h1 .small {
+            font-size: 0.8em; /* 80% of the base size */
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>
+            <span class="large">P</span>
+            <span class="small">u</span>
+            <span class="large">L</span>
+            <span class="small">s</span>
+            <span class="large">E</span>
+            <span class="small">Music</span>
+            <span class="small">Visualizer</span>
+        </h1>
+        <p>Bring your music to life with custom visuals powered by real-time audio analysis and advanced GPU rendering.</p>
+        <nav>
+            <button id="features-btn" class="btn">Features</button>
+            <a href="https://drive.google.com/drive/folders/1B0m5TrsdtE4u1Ck6Iwz5GfUjIjrh9o7e?usp=drive_link" class="btn download">Download PuLsE for Windows</a>
+            <a href="https://www.paypal.com/donate/?hosted_button_id=KL9MTW9S89GFJ" class="btn donate">Donate</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- YouTube Video Placeholder -->
+        <section class="video-section">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <!-- Screenshot Grid with Modal Trigger -->
+        <section class="screenshots-section">
+            <div class="screenshot-grid">
+                <img src="1.png" alt="Screenshot 1">
+                <img src="2.png" alt="Screenshot 2">
+                <img src="3.png" alt="Screenshot 3">
+                <img src="4.png" alt="Screenshot 4">
+                <img src="5.png" alt="Screenshot 5">
+                <img src="6.png" alt="Screenshot 6">
+                <img src="7.png" alt="Screenshot 7">
+                <img src="8.png" alt="Screenshot 8">
+            </div>
+        </section>
+    </main>
+
+    <!-- Features Pane -->
+    <aside id="features-pane">
+        <button id="close-features">Close</button>
+        <h2>Features</h2>
+        <ul>
+            <li>Real-time music visualization</li>
+            <li>Make unique favorites</li>
+            <li>Many configurable equations</li>
+            <li>Save and Share Favorites</li>
+            <li>Favorites Slideshow</li>
+            <li>Compatibility with Windows "Stereo Mix" for audio analysis</li>
+            <li>High-performance GPU accelerated point cloud rendering</li>
+        </ul>
+    </aside>
+
+    <!-- Modal for Full-Sized Images -->
+    <div class="modal" id="imageModal">
+        <span class="close">×</span>
+        <img class="modal-content" id="modalImage">
+        <div class="prev">❮</div>
+        <div class="next">❯</div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <footer>
+    <p>© 2025 Patrick G. Leamy | Visit "Boxed Pandora" on <a href="https://twitter.com/pgleamy" target="_blank">X.com</a><img src="https://hits.sh/pgleamy.github.io/hits.png" style="width: 4px; height: 4px; vertical-align: middle; margin-left: 2px;" alt="."></p>
+</footer>
+    </footer>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        // Toggle Features Pane
+        document.getElementById('features-btn').addEventListener('click', () => {
+            document.getElementById('features-pane').classList.add('open');
+        });
+        document.getElementById('close-features').addEventListener('click', () => {
+            document.getElementById('features-pane').classList.remove('open');
+        });
+
+        // Modal Functionality
+        const images = document.querySelectorAll('.screenshot-grid img');
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const closeBtn = document.querySelector('.close');
+        const prevBtn = document.querySelector('.prev');
+        const nextBtn = document.querySelector('.next');
+        let currentIndex = 0;
+
+        images.forEach((img, index) => {
+            img.addEventListener('click', () => {
+                currentIndex = index;
+                modalImg.src = img.src; // Use the thumbnail src directly
+                modal.style.display = 'block';
+            });
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
+            modalImg.src = images[currentIndex].src; // Update to use src
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
+            modalImg.src = images[currentIndex].src; // Update to use src
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
