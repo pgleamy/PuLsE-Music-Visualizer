@@ -6,12 +6,10 @@
     <title>PuLsE Music Visualizer</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
-
-	/* Add smooth scrolling to the entire page */
+        /* Add smooth scrolling to the entire page */
         html {
             scroll-behavior: smooth;
         }
-
 
         /* General Styles */
         body {
@@ -132,7 +130,7 @@
             cursor: pointer;
             opacity: 0.95;
             transition: opacity 0.3s ease;
-            border-radius: 10px; /* Added: Rounded corners for thumbnails */
+            border-radius: 10px;
         }
 
         .screenshot-grid img:hover {
@@ -143,20 +141,20 @@
         #features-pane {
             position: fixed;
             top: 0;
-            left: 0; /* Changed: Fixed position, no sliding */
+            left: 0;
             width: 20%;
             height: 100%;
             background-color: rgba(26, 26, 26, 0.9);
             padding: 20px;
-            opacity: 0; /* Added: Starts invisible */
-            visibility: hidden; /* Added: Hidden from interaction */
-            transition: opacity 0.3s ease-in-out; /* Changed: Fade effect */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out;
             z-index: 1000;
         }
 
         #features-pane.open {
-            opacity: 1; /* Added: Fully visible when open */
-            visibility: visible; /* Added: Accessible when open */
+            opacity: 1;
+            visibility: visible;
         }
 
         #close-features {
@@ -185,7 +183,7 @@
         }
 
         /* Modal for Full-Sized Images */
-.modal {
+        .modal {
             display: none;
             position: fixed;
             z-index: 1000;
@@ -194,13 +192,28 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.9);
+            overflow-y: auto; /* Enable scrolling if content overflows */
         }
 
         .modal-content {
             display: block;
-            max-width: 97vw; /* Max 90% of viewport width */
-            max-height: 97vh; /* Max 90% of viewport height */
-            object-fit: contain; /* Maintain aspect ratio */
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .privacy-modal-content {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 80vw;
+            max-height: 80vh;
+            overflow-y: auto;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -246,6 +259,7 @@
         .prev:hover, .next:hover {
             background-color: rgba(0, 0, 0, 0.8);
         }
+
         /* Footer */
         footer {
             text-align: center;
@@ -262,12 +276,18 @@
             text-decoration: underline;
         }
 
+        footer .privacy-btn {
+            color: #00ffff;
+            background: none;
+            border: none;
+            font-size: 0.9em;
+            cursor: pointer;
+            padding: 0;
+        }
 
-footer .privacy-policy {
-    font-size: 0.9em;
-    margin: 10px 0 0;
-    color: #b0b0b0;
-}
+        footer .privacy-btn:hover {
+            text-decoration: underline;
+        }
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -310,11 +330,11 @@ footer .privacy-policy {
 
         h1 {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 3em; /* Base size for the title */
+            font-size: 3em;
         }
 
         h1 .small {
-            font-size: 0.8em; /* 80% of the base size */
+            font-size: 0.8em;
         }
     </style>
 </head>
@@ -385,13 +405,37 @@ footer .privacy-policy {
         <div class="next">❯</div>
     </div>
 
+    <!-- Modal for Privacy Policy -->
+    <div class="modal" id="privacyModal">
+        <span class="close">×</span>
+        <div class="privacy-modal-content">
+            <h2>Privacy Policy for PuLsE Music Visualizer</h2>
+            <p><strong>Last Updated: March 6, 2025</strong></p>
+            <p>Welcome to PuLsE Music Visualizer, a desktop application developed by Patrick G. Leamy ("we," "us," or "our"). This Privacy Policy explains how we handle information when you use PuLsE Music Visualizer ("the App"). We are committed to protecting your privacy, and we want you to understand that the App is designed to operate without collecting or tracking any personal information.</p>
+            <h3>Information We Collect</h3>
+            <p>PuLsE Music Visualizer <strong>does not collect, store, or transmit any personal information</strong> about you. The App functions solely as a music visualizer, analyzing audio output from your device in real-time to create visual effects. No data about you, your device, or your usage is gathered, tracked, or shared.</p>
+            <ul>
+                <li><strong>No Personal Data</strong>: We do not collect your name, email address, IP address, or any other personally identifiable information.</li>
+                <li><strong>No Audio Content</strong>: The App processes audio data locally on your device for visualization purposes only. We do not record, store, or analyze the content of the audio you play.</li>
+                <li><strong>No Tracking</strong>: We do not use cookies, analytics, or any tracking technologies to monitor your activity within the App.</li>
+            </ul>
+            <h3>How We Use Information</h3>
+            <p>Since PuLsE Music Visualizer does not collect any personal information, there is no data for us to use, share, or process beyond the real-time audio analysis required for the visualization feature. All processing occurs locally on your device and is not sent to us or any third party.</p>
+            <h3>Data Sharing</h3>
+            <p>We do not share any information with third parties because no personal or usage data is collected by the App.</p>
+            <h3>Children’s Privacy</h3>
+            <p>PuLsE Music Visualizer does not collect any personal information and is safe for use by individuals of all ages, including children. It complies with the Children’s Online Privacy Protection Act (COPPA) by not gathering any data from users.</p>
+            <h3>Changes to This Privacy Policy</h3>
+            <p>We may update this Privacy Policy from time to time to reflect changes in the App or legal requirements. Any updates will be posted here with a revised "Last Updated" date. Since the App does not collect data, changes are unlikely to affect your use.</p>
+            <h3>Contact Us</h3>
+            <p>If you have any questions about this Privacy Policy or PuLsE Music Visualizer, please contact us at <a href="mailto:pgleamy@icloud.com">pgleamy@icloud.com</a>. We’re happy to assist you.</p>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
-       <!-- Footer -->
-<footer>
-    <p>© 2025 Patrick G. Leamy | Visit "Boxed Pandora" on <a href="https://twitter.com/pgleamy" target="_blank">X.com </a><img src="https://hits.sh/pgleamy.github.io/PuLsE-Music-Visualizer/hits.png.svg?color=555555" style="width: 20px; height: 14px; vertical-align: middle; margin-left: 2px;" alt="."></p>
-    <p class="privacy-policy">PRIVACY POLICY: PuLsE collects no personal information from the user or from the user's computer. Your use of PuLsE is entirely private.</p>
-</footer>
+        <p>© 2025 Patrick G. Leamy | Visit "Boxed Pandora" on <a href="https://twitter.com/pgleamy" target="_blank">X.com </a><img src="https://hits.sh/pgleamy.github.io/PuLsE-Music-Visualizer/hits.png.svg?color=555555" style="width: 20px; height: 14px; vertical-align: middle; margin-left: 2px;" alt="."></p>
+        <button class="privacy-btn" id="privacy-btn">PRIVACY POLICY</button>
     </footer>
 
     <!-- JavaScript for Interactivity -->
@@ -404,11 +448,11 @@ footer .privacy-policy {
             document.getElementById('features-pane').classList.remove('open');
         });
 
-        // Modal Functionality
+        // Modal Functionality for Screenshots
         const images = document.querySelectorAll('.screenshot-grid img');
-        const modal = document.getElementById('imageModal');
+        const imageModal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImage');
-        const closeBtn = document.querySelector('.close');
+        const closeImageBtn = imageModal.querySelector('.close');
         const prevBtn = document.querySelector('.prev');
         const nextBtn = document.querySelector('.next');
         let currentIndex = 0;
@@ -416,28 +460,47 @@ footer .privacy-policy {
         images.forEach((img, index) => {
             img.addEventListener('click', () => {
                 currentIndex = index;
-                modalImg.src = img.src; // Use the thumbnail src directly
-                modal.style.display = 'block';
+                modalImg.src = img.src;
+                imageModal.style.display = 'block';
             });
         });
 
-        closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
+        closeImageBtn.addEventListener('click', () => {
+            imageModal.style.display = 'none';
         });
 
         prevBtn.addEventListener('click', () => {
             currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
-            modalImg.src = images[currentIndex].src; // Update to use src
+            modalImg.src = images[currentIndex].src;
         });
 
         nextBtn.addEventListener('click', () => {
             currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
-            modalImg.src = images[currentIndex].src; // Update to use src
+            modalImg.src = images[currentIndex].src;
         });
 
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.display = 'none';
+        imageModal.addEventListener('click', (e) => {
+            if (e.target === imageModal) {
+                imageModal.style.display = 'none';
+            }
+        });
+
+        // Privacy Policy Modal
+        const privacyModal = document.getElementById('privacyModal');
+        const privacyBtn = document.getElementById('privacy-btn');
+        const closePrivacyBtn = privacyModal.querySelector('.close');
+
+        privacyBtn.addEventListener('click', () => {
+            privacyModal.style.display = 'block';
+        });
+
+        closePrivacyBtn.addEventListener('click', () => {
+            privacyModal.style.display = 'none';
+        });
+
+        privacyModal.addEventListener('click', (e) => {
+            if (e.target === privacyModal) {
+                privacyModal.style.display = 'none';
             }
         });
     </script>
