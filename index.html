@@ -1,511 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PuLsE Music Visualizer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
-    <style>
-        /* Add smooth scrolling to the entire page */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* General Styles */
-        body {
-            margin: 0;
-            font-family: 'Roboto', sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Background Image with Opacity */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('background.png'); /* Replace with your image */
-            background-size: cover;
-            background-position: center;
-            opacity: 0.8;
-            z-index: -1;
-        }
-
-        /* Header */
-        header {
-            text-align: center;
-            padding: 20px;
-            background-color: rgba(26, 26, 26, 0.9);
-            position: relative;
-        }
-
-        h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3em;
-            margin: 0;
-        }
-
-        p {
-            font-size: 1.2em;
-            margin: 10px 0;
-        }
-
-        nav {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-
-        .btn {
-            padding: 5px 10px; /* Updated: Half of original 10px 20px */
-            margin-left: 10px;
-            background-color: #00ffff;
-            color: #121212;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 8px; /* Updated: Half of assumed 16px default */
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            transition: opacity 0.3s ease;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-        }
-
-        .btn.download {
-            background-color: #39ff14;
-        }
-
-        .btn.donate {
-            background-color: #ff007f;
-        }
-
-        /* Video Section */
-        .video-section {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .video-wrapper {
-            position: relative;
-            width: 50%;
-            max-width: 600px;
-            padding-bottom: 28.125%; /* 16:9 Aspect Ratio */
-        }
-
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Screenshots Section */
-        .screenshots-section {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .screenshot-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        .screenshot-grid img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            cursor: pointer;
-            opacity: 0.95;
-            transition: opacity 0.3s ease;
-            border-radius: 10px;
-        }
-
-        .screenshot-grid img:hover {
-            opacity: 1;
-        }
-
-        /* Features Pane */
-        #features-pane {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 20%;
-            height: 100%;
-            background-color: rgba(26, 26, 26, 0.9);
-            padding: 20px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease-in-out;
-            z-index: 1000;
-        }
-
-        #features-pane.open {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        #close-features {
-            background: none;
-            border: none;
-            color: #e0e0e0;
-            font-size: 1.2em;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-
-        #features-pane h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2em;
-            margin: 0 0 20px;
-        }
-
-        #features-pane ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        #features-pane li {
-            margin: 10px 0;
-            font-size: 1.1em;
-        }
-
-        /* Modal for Full-Sized Images */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            overflow-y: auto; /* Enable scrolling if content overflows */
-        }
-
-        .modal-content {
-            display: block;
-            max-width: 90vw;
-            max-height: 90vh;
-            object-fit: contain;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .privacy-modal-content {
-            background-color: #1a1a1a;
-            color: #e0e0e0;
-            padding: 20px;
-            border-radius: 5px;
-            max-width: 80vw;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: #bbb;
-        }
-
-        .prev, .next {
-            cursor: pointer;
-            position: absolute;
-            top: 50%;
-            width: auto;
-            padding: 16px;
-            margin-top: -22px;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-            transition: 0.6s ease;
-            user-select: none;
-        }
-
-        .prev {
-            left: 0;
-        }
-
-        .next {
-            right: 0;
-        }
-
-        .prev:hover, .next:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: rgba(26, 26, 26, 0.9);
-        }
-
-        footer a {
-            color: #00ffff;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        footer .privacy-btn {
-            color: #00ffff;
-            background: none;
-            border: none;
-            font-size: 0.9em;
-            cursor: pointer;
-            padding: 0;
-        }
-
-        footer .privacy-btn:hover {
-            text-decoration: underline;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .screenshot-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            #features-pane {
-                width: 40%;
-            }
-
-            nav {
-                position: static;
-                margin-top: 20px;
-            }
-
-            .btn {
-                display: inline-block;
-                margin: 5px;
-            }
-
-            .video-wrapper {
-                width: 80%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .screenshot-grid {
-                grid-template-columns: 1fr;
-            }
-
-            #features-pane {
-                width: 100%;
-            }
-
-            .video-wrapper {
-                width: 100%;
-            }
-        }
-
-        h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3em;
-        }
-
-        h1 .small {
-            font-size: 0.8em;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101114">
+  <meta name="description" content="Bring your music to life with PuLsE for Windows. Explore colourful 3D visuals, make them your own, and share your Favorites.">
+  <meta property="og:title" content="PuLsE — See where the music takes you.">
+  <meta property="og:description" content="Real-time music visualization for Windows. Explore, create and share your own world of colour and motion.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pgleamy.github.io/PuLsE-Music-Visualizer/">
+  <link rel="canonical" href="https://pgleamy.github.io/PuLsE-Music-Visualizer/">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="site.js" defer></script>
+  <title>PuLsE — Music Visualizer for Windows</title>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <h1>
-            <span class="large">P</span>
-            <span class="small">u</span>
-            <span class="large">L</span>
-            <span class="small">s</span>
-            <span class="large">E</span>
-            <span class="small">Music</span>
-            <span class="small">Visualizer</span>
-        </h1>
-        <p>Bring your music to life with custom visuals powered by real-time audio analysis and advanced GPU rendering.</p>
-        <nav>
-            <button id="features-btn" class="btn">Features</button>
-            <a href="https://apps.microsoft.com/store/detail/9MTKFB0QCWK6?cid=DevShareMCLPCS" class="btn download" target="_blank">Get PuLsE for Windows</a>
-        </nav>
-    </header>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header wrap">
+    <a class="wordmark" href="#" aria-label="PuLsE home">PuLsE</a>
+    <nav aria-label="Main navigation">
+      <a href="https://apps.microsoft.com/store/detail/9MTKFB0QCWK6?cid=DevShareMCLPCS">Get PuLsE <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
 
-    <!-- Main Content -->
-    <main>
-        <!-- YouTube Video Placeholder -->
-        <section class="video-section">
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/2X6csBCjyRQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            </div>
-        </section>
+  <main id="main" class="wrap">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">MUSIC VISUALIZER FOR WINDOWS</p>
+        <h1 id="hero-title">See where the music <em>takes you.</em></h1>
+        <p class="hero-description">Bring your music to life in colour, light and motion. React to system audio or a microphone, enjoy a ready-made Favorite, or create something entirely your own. Through experimental customization, no two visualizations will be the same.</p>
+        <a class="button" href="https://apps.microsoft.com/store/detail/9MTKFB0QCWK6?cid=DevShareMCLPCS">Get PuLsE for Windows <span aria-hidden="true">↗</span></a>
+        <p class="store-note">Available on the Microsoft Store</p>
+      </div>
+      <figure class="capture hero-figure" aria-label="Featured PuLsE visualization">
+        <a class="capture-open" href="assets/screenshots/demo-2-full.webp" aria-label="Enlarge blue and violet kaleidoscopic visualization">
+          <img src="assets/screenshots/demo-2-1200.webp" srcset="assets/screenshots/demo-2-640.webp 640w, assets/screenshots/demo-2-1200.webp 1200w" sizes="(max-width: 650px) calc(100vw - 36px), 560px" width="3440" height="1440" fetchpriority="high" alt="Blue, cyan and violet lines forming a luminous symmetrical PuLsE visualization">
+        </a>
+      </figure>
+    </section>
 
-        <!-- Screenshot Grid with Modal Trigger -->
-        <section class="screenshots-section">
-            <div class="screenshot-grid">
-                <img src="1.png" alt="Screenshot 1">
-                <img src="2.png" alt="Screenshot 2">
-                <img src="3.png" alt="Screenshot 3">
-                <img src="4.png" alt="Screenshot 4">
-                <img src="5.png" alt="Screenshot 5">
-                <img src="6.png" alt="Screenshot 6">
-                <img src="7.png" alt="Screenshot 7">
-                <img src="8.png" alt="Screenshot 8">
-            </div>
-        </section>
-    </main>
+    <section class="gallery-section" id="explore" aria-labelledby="gallery-title">
+      <h2 id="gallery-title">A few of the possibilities.</h2>
+      <div class="gallery">
+        <figure class="capture">
+          <a class="capture-open" href="assets/screenshots/demo-1-full.webp" aria-label="Enlarge immersive green tunnel visualization">
+            <img src="assets/screenshots/demo-1-640.webp" srcset="assets/screenshots/demo-1-640.webp 640w, assets/screenshots/demo-1-1200.webp 1200w" sizes="(max-width: 650px) calc(100vw - 36px), 560px" width="3440" height="1440" loading="lazy" decoding="async" alt="Glowing green patterns flowing through a deep PuLsE tunnel">
+          </a>
+          <figcaption>Immersive tunnels</figcaption>
+        </figure>
+        <figure class="capture">
+          <a class="capture-open" href="assets/screenshots/demo-3-full.webp" aria-label="Enlarge colourful light and geometry visualization">
+            <img src="assets/screenshots/demo-3-640.webp" srcset="assets/screenshots/demo-3-640.webp 640w, assets/screenshots/demo-3-1200.webp 1200w" sizes="(max-width: 650px) calc(100vw - 36px), 560px" width="3440" height="1440" loading="lazy" decoding="async" alt="Angular pink, red and blue light patterns against a dark PuLsE background">
+          </a>
+          <figcaption>Light, colour &amp; geometry</figcaption>
+        </figure>
+      </div>
+      <div class="features" id="features">
+        <article>
+          <a class="capture-open feature-capture" href="assets/screenshots/control-panel-full.webp" aria-label="Enlarge the PuLsE control panel">
+            <img src="assets/screenshots/control-panel-640.webp" srcset="assets/screenshots/control-panel-640.webp 640w, assets/screenshots/control-panel-1200.webp 1200w" sizes="(max-width: 650px) calc(100vw - 36px), 370px" width="3440" height="1440" loading="lazy" decoding="async" alt="PuLsE control panel beside a colourful point cloud, showing colour, glow, Remix and effect controls">
+          </a>
+          <h3>Make it your own</h3>
+          <p>Shape the colour, glow, movement and response to music. Combine effects or press Remix for a fresh variation.</p>
+        </article>
+        <article>
+          <a class="capture-open feature-capture" href="assets/screenshots/favorites-full.webp" aria-label="Enlarge the saved Favorites panel">
+            <img src="assets/screenshots/favorites-640.webp" srcset="assets/screenshots/favorites-640.webp 640w, assets/screenshots/favorites-1200.webp 1200w" sizes="(max-width: 650px) calc(100vw - 36px), 370px" width="3440" height="1440" loading="lazy" decoding="async" alt="Saved Favorites with Load, Update and Export controls beside a purple and cyan visualization">
+          </a>
+          <h3>Keep your Favorites</h3>
+          <p>Save the looks you love, revisit them in Slideshow, or arrange your own sequence with timed playlists.</p>
+        </article>
+        <article>
+          <a class="capture-open feature-capture" href="assets/screenshots/community-favorites-full.webp" aria-label="Enlarge Community Favorites">
+            <img src="assets/screenshots/community-favorites-640.webp" srcset="assets/screenshots/community-favorites-640.webp 640w, assets/screenshots/community-favorites-1200.webp 1200w" sizes="(max-width: 650px) calc(100vw - 36px), 370px" width="3440" height="1440" loading="lazy" decoding="async" alt="Community Favorites showing Recently Added and Popular creations, with options to play, save and share">
+          </a>
+          <h3>Discover &amp; share</h3>
+          <p>Browse Community Favorites, try Surprise Me, and share your own creations with other PuLsE listeners.</p>
+        </article>
+        <article>
+          <a class="capture-open feature-capture" href="assets/screenshots/playlists-full.webp" aria-label="Enlarge the Playlists workspace">
+            <img src="assets/screenshots/playlists-640.webp" srcset="assets/screenshots/playlists-640.webp 640w, assets/screenshots/playlists-1200.webp 1200w" sizes="(max-width: 650px) calc(100vw - 36px), (max-width: 900px) 420px, 277px" width="3440" height="1440" loading="lazy" decoding="async" alt="PuLsE Playlists workspace with saved Favorites arranged into a timed sequence">
+          </a>
+          <h3>Build a playlist</h3>
+          <p>Arrange your Favorites, set how long each plays, and enjoy a custom full-screen sequence.</p>
+        </article>
+      </div>
+    </section>
+  </main>
 
-    <!-- Features Pane -->
-    <aside id="features-pane">
-        <button id="close-features">Close</button>
-        <h2>Features</h2>
-        <ul>
-            <li>Real-time music visualization</li>
-            <li>Make unique favorites. No two the same!</li>
-            <li>Community Favorites, get and share favorites with others easily</li>
-            <li>Many configurable equations and controls</li>
-            <li>Fine audio reactivity controls</li>
-            <li>Favorites Slideshow</li>
-            <li>Several pre-made favorites bundled</li>
-            <li>High-performance GPU accelerated point cloud rendering</li>
-            <li>Make PuLsE your own, like no other!</li>
-
-        </ul>
-    </aside>
-
-    <!-- Modal for Full-Sized Images -->
-    <div class="modal" id="imageModal">
-        <span class="close">×</span>
-        <img class="modal-content" id="modalImage">
-        <div class="prev">❮</div>
-        <div class="next">❯</div>
+  <footer class="site-footer wrap">
+    <div class="footer-row">
+      <p>© <span id="copyright-year">2026</span> Patrick G. Leamy</p>
+      <div class="footer-links"><a href="mailto:pgleamy@icloud.com">Contact</a><a href="privacy%20policy/index.html">Privacy</a></div>
     </div>
+  </footer>
 
-    <!-- Modal for Privacy Policy -->
-    <div class="modal" id="privacyModal">
-        <span class="close">×</span>
-        <div class="privacy-modal-content">
-            <h2>Privacy Policy for PuLsE Music Visualizer</h2>
-            <p><strong>Last Updated: March 6, 2025</strong></p>
-            <p>Welcome to PuLsE Music Visualizer, a desktop application developed by Patrick G. Leamy ("we," "us," or "our"). This Privacy Policy explains how we handle information when you use PuLsE Music Visualizer ("the App"). We are committed to protecting your privacy, and we want you to understand that the App is designed to operate without collecting or tracking any personal information.</p>
-            <h3>Information We Collect</h3>
-            <p>PuLsE Music Visualizer <strong>does not collect, store, or transmit any personal information</strong> about you. The App functions solely as a music visualizer, analyzing audio output from your device in real-time to create visual effects. No data about you, your device, or your usage is gathered, tracked, or shared.</p>
-            <ul>
-                <li><strong>No Personal Data</strong>: We do not collect your name, email address, IP address, or any other personally identifiable information.</li>
-                <li><strong>No Audio Content</strong>: The App processes audio data locally on your device for visualization purposes only. We do not record, store, or analyze the content of the audio you play.</li>
-                <li><strong>No Tracking</strong>: We do not use cookies, analytics, or any tracking technologies to monitor your activity within the App.</li>
-            </ul>
-            <h3>How We Use Information</h3>
-            <p>Since PuLsE Music Visualizer does not collect any personal information, there is no data for us to use, share, or process beyond the real-time audio analysis required for the visualization feature. All processing occurs locally on your device and is not sent to us or any third party.</p>
-            <h3>Data Sharing</h3>
-            <p>We do not share any information with third parties because no personal or usage data is collected by the App.</p>
-            <h3>Children’s Privacy</h3>
-            <p>PuLsE Music Visualizer does not collect any personal information and is safe for use by individuals of all ages, including children. It complies with the Children’s Online Privacy Protection Act (COPPA) by not gathering any data from users.</p>
-            <h3>Changes to This Privacy Policy</h3>
-            <p>We may update this Privacy Policy from time to time to reflect changes in the App or legal requirements. Any updates will be posted here with a revised "Last Updated" date. Since the App does not collect data, changes are unlikely to affect your use.</p>
-            <h3>Contact Us</h3>
-            <p>If you have any questions about this Privacy Policy or PuLsE Music Visualizer, please contact us at <a href="mailto:pgleamy@icloud.com">pgleamy@icloud.com</a>. We’re happy to assist you.</p>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <p>© 2025 Patrick G. Leamy | Visit "Boxed Pandora" on <a href="https://twitter.com/pgleamy" target="_blank">X.com </a><img src="https://hits.sh/pgleamy.github.io/PuLsE-Music-Visualizer/hits.png.svg?color=555555" style="width: 20px; height: 14px; vertical-align: middle; margin-left: 2px;" alt="."></p>
-        <button class="privacy-btn" id="privacy-btn">PRIVACY POLICY</button>
-    </footer>
-
-    <!-- JavaScript for Interactivity -->
-    <script>
-        // Toggle Features Pane
-        document.getElementById('features-btn').addEventListener('click', () => {
-            document.getElementById('features-pane').classList.add('open');
-        });
-        document.getElementById('close-features').addEventListener('click', () => {
-            document.getElementById('features-pane').classList.remove('open');
-        });
-
-        // Modal Functionality for Screenshots
-        const images = document.querySelectorAll('.screenshot-grid img');
-        const imageModal = document.getElementById('imageModal');
-        const modalImg = document.getElementById('modalImage');
-        const closeImageBtn = imageModal.querySelector('.close');
-        const prevBtn = document.querySelector('.prev');
-        const nextBtn = document.querySelector('.next');
-        let currentIndex = 0;
-
-        images.forEach((img, index) => {
-            img.addEventListener('click', () => {
-                currentIndex = index;
-                modalImg.src = img.src;
-                imageModal.style.display = 'block';
-            });
-        });
-
-        closeImageBtn.addEventListener('click', () => {
-            imageModal.style.display = 'none';
-        });
-
-        prevBtn.addEventListener('click', () => {
-            currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
-            modalImg.src = images[currentIndex].src;
-        });
-
-        nextBtn.addEventListener('click', () => {
-            currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
-            modalImg.src = images[currentIndex].src;
-        });
-
-        imageModal.addEventListener('click', (e) => {
-            if (e.target === imageModal) {
-                imageModal.style.display = 'none';
-            }
-        });
-
-        // Privacy Policy Modal
-        const privacyModal = document.getElementById('privacyModal');
-        const privacyBtn = document.getElementById('privacy-btn');
-        const closePrivacyBtn = privacyModal.querySelector('.close');
-
-        privacyBtn.addEventListener('click', () => {
-            privacyModal.style.display = 'block';
-        });
-
-        closePrivacyBtn.addEventListener('click', () => {
-            privacyModal.style.display = 'none';
-        });
-
-        privacyModal.addEventListener('click', (e) => {
-            if (e.target === privacyModal) {
-                privacyModal.style.display = 'none';
-            }
-        });
-    </script>
+  <dialog class="lightbox" aria-label="Enlarged screenshot">
+    <button class="lightbox-close" type="button" aria-label="Close enlarged screenshot">×</button>
+    <img alt="" width="3440" height="1440">
+    <a class="lightbox-original" href="assets/screenshots/demo-2-full.webp" target="_blank" rel="noopener">Open full-size image <span aria-hidden="true">↗</span></a>
+  </dialog>
 </body>
 </html>

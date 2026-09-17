@@ -1,0 +1,98 @@
+@charset "UTF-8";
+
+:root {
+  color-scheme: dark;
+  --bg: #101114;
+  --text: #f3f1ed;
+  --muted: #b0b0ba;
+  --line: #323238;
+  --lime: #d6f594;
+  --lilac: #c5b5f3;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: Arial, Helvetica, sans-serif; line-height: 1.7; }
+body:has(dialog[open]) { overflow: hidden; }
+h1, h2, h3, p, figure { margin: 0; }
+h1, h2, h3 { font-weight: 500; line-height: 1.15; letter-spacing: -.035em; text-wrap: balance; }
+h1 { font-size: clamp(42px, 4.5vw, 62px); letter-spacing: -.05em; max-width: 480px; }
+h2 { font-size: 28px; }
+h3 { font-size: 19px; }
+em { color: var(--lilac); font-family: Georgia, 'Times New Roman', serif; font-weight: 400; }
+a { color: inherit; text-underline-offset: 4px; }
+a:hover { color: var(--lime); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--lime); outline-offset: 5px; }
+button { font: inherit; }
+::selection { background: var(--lilac); color: var(--bg); }
+.wrap { max-width: 1180px; width: calc(100% - 80px); margin-inline: auto; }
+.skip-link { position: fixed; top: 12px; left: 12px; transform: translateY(-180%); padding: 10px 20px; background: var(--lime); color: var(--bg); z-index: 20; }
+.skip-link:focus { transform: translateY(0); }
+.site-header { min-height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--line); }
+.wordmark { font-size: 32px; font-weight: 800; letter-spacing: -2px; text-decoration: none; line-height: 1; }
+.site-header nav { display: flex; align-items: center; gap: 28px; }
+.site-header nav a { font-size: 13px; color: var(--muted); text-decoration: none; }
+.site-header nav a:last-child { color: var(--lime); }
+.site-header nav a:hover { color: var(--text); }
+.hero { display: grid; grid-template-columns: 1fr 1.1fr; gap: 50px; align-items: center; padding-block: 52px; }
+.eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .14em; color: var(--muted); margin-bottom: 18px; }
+.hero-description { max-width: 430px; color: var(--muted); font-size: 15px; margin-top: 20px; }
+.button { display: inline-flex; align-items: center; gap: 18px; background: var(--lime); border: 1px solid var(--lime); color: #182011; border-radius: 5px; font-size: 13px; font-weight: 700; line-height: 1.5; text-decoration: none; padding: 13px 20px; margin-top: 25px; }
+.button:hover { color: #182011; background: #e5ffb4; }
+.store-note { font-size: 11px; color: var(--muted); margin-top: 9px; }
+.gallery-section { padding-block: 30px 44px; }
+.gallery-section h2 { margin-bottom: 22px; }
+.gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.gallery figcaption { font-size: 13px; color: var(--muted); padding-top: 10px; }
+.features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 30px; }
+.features p { margin-top: 12px; color: var(--muted); font-size: 14px; }
+.site-footer { padding-block: 23px; border-top: 1px solid var(--line); color: var(--muted); }
+.footer-row { display: flex; justify-content: space-between; align-items: center; gap: 20px; font-size: 12px; }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { text-decoration: none; }
+.capture-open { display: block; position: relative; overflow: hidden; border: 1px solid #38343f; border-radius: 6px; background: #090a0d; cursor: zoom-in; }
+.capture-open img { display: block; width: 100%; height: auto; aspect-ratio: 43 / 18; object-fit: contain; }
+.capture-open::after { content: '↗'; position: absolute; right: 8px; bottom: 8px; width: 26px; height: 26px; display: grid; place-items: center; background: #101114c9; color: white; border: 1px solid #ffffff40; border-radius: 4px; font-size: 15px; line-height: 1; }
+.feature-capture { margin-bottom: 18px; }
+.capture-open:focus-visible { outline-offset: -6px; }
+.lightbox { background: #111216; color: var(--text); border: 1px solid #55515f; border-radius: 8px; width: min(94vw, 1500px); max-width: 94vw; padding: 50px 18px 12px; max-height: 94dvh; overflow: auto; }
+.lightbox::backdrop { background: #07070bf0; }
+.lightbox img { display: block; object-fit: contain; width: 100%; height: auto; max-height: 75dvh; }
+.lightbox-original { display: block; width: fit-content; margin: 10px auto 4px; font-size: 12px; color: var(--lilac); }
+.lightbox-close { position: absolute; right: 12px; top: 4px; width: 44px; height: 44px; border: 0; background: transparent; color: white; font-size: 32px; cursor: pointer; }
+/* Shared styles for the standalone privacy page. */
+.site-header:has(.header-inner) { display: block; width: 100%; max-width: none; border: 0; }
+.header-inner { min-height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--line); }
+.text-link { font-size: 13px; text-decoration: none; }
+.privacy-main { max-width: 800px; padding-block: 55px 70px; }
+.privacy-main h1 { font-size: 48px; margin: 22px 0; }
+.privacy-main h2 { font-size: 24px; margin: 34px 0 14px; }
+.privacy-main p { color: var(--muted); font-size: 15px; margin-block: 14px; }
+.privacy-main a { color: var(--lilac); }
+.privacy-main .eyebrow { font-size: 10px; }
+@media (max-width: 900px) {
+  .wrap { width: calc(100% - 48px); }
+  .hero { gap: 28px; }
+  .hero h1 { font-size: 46px; }
+  .features { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 650px) {
+  .wrap { width: calc(100% - 36px); }
+  .site-header, .header-inner { min-height: 72px; gap: 16px; }
+  .wordmark { font-size: 28px; }
+  .site-header nav { gap: 18px; }
+  .site-header nav a { font-size: 12px; }
+  .hero { grid-template-columns: 1fr; gap: 28px; padding-block: 34px; }
+  .hero h1 { font-size: clamp(42px, 10vw, 56px); max-width: 470px; }
+  .hero-description { margin-top: 17px; }
+  .eyebrow { margin-bottom: 14px; }
+  h2 { font-size: 25px; }
+  .gallery-section { padding-block: 12px 30px; }
+  .gallery { grid-template-columns: 1fr; gap: 22px; }
+  .features { grid-template-columns: 1fr; gap: 23px; margin-top: 24px; }
+  .features p { margin-top: 8px; }
+  .footer-row { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .footer-links { gap: 22px; }
+  .privacy-main { padding-block: 35px; }
+  .privacy-main h1 { font-size: 40px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
